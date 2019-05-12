@@ -35,7 +35,7 @@ public class CarController {
 		return carService.save(car);
 	}
 
-	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+	@RequestMapping(value = "/{id}", method = RequestMethod.PATCH)
 	public Car update(@PathVariable("id") Long id, @Valid @RequestBody Car car) {
 		carService.find(id);
 		car.setId(id);
@@ -43,8 +43,10 @@ public class CarController {
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-	public void delete(@PathVariable("id") Long id) {
+	public Car delete(@PathVariable("id") Long id) {
+		Car carDeleted = carService.find(id);
 		carService.delete(id);
+		return carDeleted;
 	}
 
 	@GetMapping

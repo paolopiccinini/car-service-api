@@ -18,6 +18,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.advantio.carserviceapi.domain.Car;
@@ -44,6 +45,7 @@ public class CarServiceApiApplicationTests {
 	public void setUp() {
 		System.setProperty("sun.net.http.allowRestrictedHeaders", "true");
 		restTemplate = new TestRestTemplate();
+		restTemplate.getRestTemplate().setRequestFactory(new HttpComponentsClientHttpRequestFactory());
 		headers = new HttpHeaders();
 		headers.setOrigin("https://stackoverflow.com");
 		headers.setContentType(MediaType.APPLICATION_JSON);
@@ -100,7 +102,7 @@ public class CarServiceApiApplicationTests {
 		HttpEntity<String> entity = new HttpEntity<String>(jacksonObjectMapper.writeValueAsString(carTest), headers);
 
 		ResponseEntity<String> response = restTemplate.exchange(createURLWithPort("/cars/" + carTest.getId()),
-				HttpMethod.PUT, entity, String.class);
+				HttpMethod.PATCH, entity, String.class);
 
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 		assertThat(jacksonObjectMapper.readValue(response.getBody(), Car.class)).isEqualTo(carTest);

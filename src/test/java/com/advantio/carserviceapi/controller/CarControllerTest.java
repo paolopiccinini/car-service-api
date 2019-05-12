@@ -7,7 +7,7 @@ import static org.mockito.Mockito.doThrow;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 
 import java.util.List;
 
@@ -105,7 +105,7 @@ public class CarControllerTest {
 		given(carService.save(any(Car.class))).willReturn(carUpdated);
 
 		MockHttpServletResponse response = mvc.perform(
-				put("/cars/1").contentType(MediaType.APPLICATION_JSON).content(carJackson.write(carUpdated).getJson()))
+				patch("/cars/1").contentType(MediaType.APPLICATION_JSON).content(carJackson.write(carUpdated).getJson()))
 				.andReturn().getResponse();
 
 		assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
@@ -124,7 +124,7 @@ public class CarControllerTest {
 		given(carService.find(any(Long.class))).willThrow(new CarNotFoundException("Car not found with id: 1"));
 
 		MockHttpServletResponse response = mvc.perform(
-				put("/cars/1").contentType(MediaType.APPLICATION_JSON).content(carJackson.write(carUpdated).getJson()))
+				patch("/cars/1").contentType(MediaType.APPLICATION_JSON).content(carJackson.write(carUpdated).getJson()))
 				.andReturn().getResponse();
 
 		assertThat(response.getStatus()).isEqualTo(HttpStatus.NOT_FOUND.value());
@@ -141,7 +141,7 @@ public class CarControllerTest {
 		carTest.setMileage(11);
 
 		MockHttpServletResponse response = mvc.perform(
-				put("/cars/1").contentType(MediaType.APPLICATION_JSON).content(carJackson.write(carTest).getJson()))
+				patch("/cars/1").contentType(MediaType.APPLICATION_JSON).content(carJackson.write(carTest).getJson()))
 				.andReturn().getResponse();
 
 		assertThat(response.getStatus()).isEqualTo(HttpStatus.BAD_REQUEST.value());
